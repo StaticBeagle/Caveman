@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Caveman.js test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+</head>
+
+<body>
+
+    <div>
+        <input type="text" id="messageinput" />
+    </div>
+    <div>
+        <button type="button" onclick="send();">Send</button>
+        <button type="button" onclick="sendLoop();">Send in a loop</button>
+        <button type="button" onclick="stopLoop();">Stop Loop</button>
+    </div>
+    <!-- Server responses get written here -->
+    <div id="messages"></div>
+
+    <script type="text/javascript" src="caveman.js"></script>
+    <!-- Script to utilise the WebSocket -->
+    <script type="text/javascript">
+        var repeater;
+        var vars = {
+            "b":[1,1,1,1],
+            "a":{"b":1.0,"c":1.0},
+            "c":{"b":{"d":{"a":1.0}},
+            "a":{"b":1.0}},
+            "function":1.0
+        }
+        
+        var array2D = new CaveArray2D(100, 8);
+        array2D.fill(2);
+        
+        var webSocket  = new WebSocket("ws://127.0.0.1:8675");
+                
+        webSocket.onopen = function(event){
+            writeResponse("Connection opened");
+        };
+ 
+        webSocket.onmessage = function(event){
+            writeResponse(event.data);
+        };
+ 
+        webSocket.onclose = function(event){
+            writeResponse("Connection closed");
+        };
+
+        function send(){
+            //webSocket.send(toCaveStream(array2D, vars));
+            webSocket.send(toCaveStream(array2D, vars));
+        }
+
+        function sendLoop(){
+            //webSocket.send(toCaveStream(array2D, vars));
+            repeater = setInterval(function() { webSocket.send(toCaveStream(array2D, vars)); }, 500);
+        }
+
+        function stopLoop(){
+            //webSocket.send(toCaveStream(array2D, vars));
+            clearInterval(repeater);
+        }
+           
+        function writeResponse(text){
+            messages.innerHTML += "<br/> Response received";
+        }
+    </script>
+
+</body>
+
+</html>

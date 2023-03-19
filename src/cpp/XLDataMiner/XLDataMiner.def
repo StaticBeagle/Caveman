@@ -1,0 +1,11 @@
+LIBRARY XLDataMiner.xll
+
+EXPORTS
+	xlAutoOpen
+	xlAutoClose
+	xlAutoRegister12
+	xlAutoAdd
+	xlAutoRemove
+	xlAddInManagerInfo12
+	xlAutoFree12
+	Caveman
